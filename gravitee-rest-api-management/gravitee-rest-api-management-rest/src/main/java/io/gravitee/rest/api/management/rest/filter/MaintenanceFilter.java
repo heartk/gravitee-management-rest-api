@@ -46,7 +46,7 @@ public class MaintenanceFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        if (parameterService.findAsBoolean(MAINTENANCE_MODE_ENABLED)
+        if (parameterService.findOrgAsBoolean(MAINTENANCE_MODE_ENABLED)
                 && !requestContext.getUriInfo().getPath().equals("portal")
                 && !requestContext.getUriInfo().getPath().equals("portal/")) {
             throw new MaintenanceModeException();

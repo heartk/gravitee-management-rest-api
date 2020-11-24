@@ -22,9 +22,9 @@ import io.gravitee.rest.api.model.quality.ApiQualityRuleEntity;
 import io.gravitee.rest.api.model.quality.QualityRuleEntity;
 import io.gravitee.rest.api.service.exceptions.ApiQualityMetricsDisableException;
 import io.gravitee.rest.api.service.impl.QualityMetricsServiceImpl;
+import io.gravitee.rest.api.service.quality.ApiQualityMetricCategories;
 import io.gravitee.rest.api.service.quality.ApiQualityMetricLoader;
 import io.gravitee.rest.api.service.quality.ApiQualityMetricLogo;
-import io.gravitee.rest.api.service.quality.ApiQualityMetricCategories;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,7 +73,7 @@ public class QualityMetricsServiceTest {
 
     @Test(expected = ApiQualityMetricsDisableException.class)
     public void shouldThrowExceptionIfDisabled() {
-        when(parameterService.findAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.FALSE);
+        when(parameterService.findEnvAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.FALSE);
         ApiEntity api = mock(ApiEntity.class);
 
         srv.getMetrics(api);
@@ -83,8 +83,8 @@ public class QualityMetricsServiceTest {
 
     @Test
     public void shouldReturnEmptyEntityWithoutConfiguration() {
-        when(parameterService.findAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.TRUE);
-        when(parameterService.findAll(anyList(), any())).thenReturn(Collections.emptyMap());
+        when(parameterService.findEnvAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.TRUE);
+        when(parameterService.findAllEnv(anyList(), any())).thenReturn(Collections.emptyMap());
         ApiEntity api = mock(ApiEntity.class);
 
         ApiQualityMetricsEntity metrics = srv.getMetrics(api);
@@ -95,11 +95,11 @@ public class QualityMetricsServiceTest {
 
     @Test
     public void shouldScore50Percent() {
-        when(parameterService.findAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.TRUE);
+        when(parameterService.findEnvAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.TRUE);
         Map<String, List<Object>> map = new HashMap<>();
         map.put(Key.API_QUALITY_METRICS_LOGO_WEIGHT.key(), singletonList(1));
         map.put(Key.API_QUALITY_METRICS_CATEGORIES_WEIGHT.key(), singletonList(1));
-        when(parameterService.findAll(anyList(), any())).thenReturn(map);
+        when(parameterService.findAllEnv(anyList(), any())).thenReturn(map);
         ApiEntity api = mock(ApiEntity.class);
         when(apiQualityMetricLogo.isValid(any())).thenReturn(Boolean.TRUE);
         when(apiQualityMetricCategories.isValid(any())).thenReturn(Boolean.FALSE);
@@ -114,11 +114,11 @@ public class QualityMetricsServiceTest {
 
     @Test
     public void shouldScore100Percent() {
-        when(parameterService.findAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.TRUE);
+        when(parameterService.findEnvAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.TRUE);
         Map<String, List<Object>> map = new HashMap<>();
         map.put(Key.API_QUALITY_METRICS_LOGO_WEIGHT.key(), singletonList(1));
         map.put(Key.API_QUALITY_METRICS_CATEGORIES_WEIGHT.key(), singletonList(1));
-        when(parameterService.findAll(anyList(), any())).thenReturn(map);
+        when(parameterService.findAllEnv(anyList(), any())).thenReturn(map);
         ApiEntity api = mock(ApiEntity.class);
         when(apiQualityMetricLogo.isValid(any())).thenReturn(Boolean.TRUE);
         when(apiQualityMetricCategories.isValid(any())).thenReturn(Boolean.TRUE);
@@ -133,11 +133,11 @@ public class QualityMetricsServiceTest {
 
     @Test
     public void shouldScore33Percent() {
-        when(parameterService.findAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.TRUE);
+        when(parameterService.findEnvAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.TRUE);
         Map<String, List<Object>> map = new HashMap<>();
         map.put(Key.API_QUALITY_METRICS_LOGO_WEIGHT.key(), singletonList(1));
         map.put(Key.API_QUALITY_METRICS_CATEGORIES_WEIGHT.key(), singletonList(2));
-        when(parameterService.findAll(anyList(), any())).thenReturn(map);
+        when(parameterService.findAllEnv(anyList(), any())).thenReturn(map);
         ApiEntity api = mock(ApiEntity.class);
         when(apiQualityMetricLogo.isValid(any())).thenReturn(Boolean.TRUE);
         when(apiQualityMetricCategories.isValid(any())).thenReturn(Boolean.FALSE);
@@ -152,11 +152,11 @@ public class QualityMetricsServiceTest {
 
     @Test
     public void shouldScore100PercentWithManualRules() {
-        when(parameterService.findAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.TRUE);
+        when(parameterService.findEnvAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.TRUE);
         Map<String, List<Object>> map = new HashMap<>();
         map.put(Key.API_QUALITY_METRICS_LOGO_WEIGHT.key(), singletonList(1));
         map.put(Key.API_QUALITY_METRICS_CATEGORIES_WEIGHT.key(), singletonList(1));
-        when(parameterService.findAll(anyList(), any())).thenReturn(map);
+        when(parameterService.findAllEnv(anyList(), any())).thenReturn(map);
         ApiEntity api = mock(ApiEntity.class);
         when(api.getId()).thenReturn("apiID");
         when(apiQualityMetricLogo.isValid(any())).thenReturn(Boolean.TRUE);
@@ -184,11 +184,11 @@ public class QualityMetricsServiceTest {
 
     @Test
     public void shouldScore50PercentWithManualRules() {
-        when(parameterService.findAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.TRUE);
+        when(parameterService.findEnvAsBoolean(Key.API_QUALITY_METRICS_ENABLED)).thenReturn(Boolean.TRUE);
         Map<String, List<Object>> map = new HashMap<>();
         map.put(Key.API_QUALITY_METRICS_LOGO_WEIGHT.key(), singletonList(1));
         map.put(Key.API_QUALITY_METRICS_CATEGORIES_WEIGHT.key(), singletonList(1));
-        when(parameterService.findAll(anyList(), any())).thenReturn(map);
+        when(parameterService.findAllEnv(anyList(), any())).thenReturn(map);
         ApiEntity api = mock(ApiEntity.class);
         when(api.getId()).thenReturn("apiID");
         when(apiQualityMetricLogo.isValid(any())).thenReturn(Boolean.TRUE);

@@ -750,7 +750,7 @@ public class ApiResource extends AbstractResource {
                     throw new BadRequestException("API is already stopped");
                 }
 
-                final boolean apiReviewEnabled = parameterService.findAsBoolean(Key.API_REVIEW_ENABLED);
+                final boolean apiReviewEnabled = parameterService.findEnvAsBoolean(Key.API_REVIEW_ENABLED);
                 if (apiReviewEnabled) {
                     if (api.getWorkflowState() != null && !WorkflowState.REVIEW_OK.equals(api.getWorkflowState())) {
                         throw new BadRequestException("API can not be started without being reviewed");

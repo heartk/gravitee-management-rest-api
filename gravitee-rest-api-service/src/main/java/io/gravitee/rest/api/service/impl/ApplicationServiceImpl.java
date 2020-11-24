@@ -561,12 +561,12 @@ public class ApplicationServiceImpl extends AbstractService implements Applicati
 
 
     private boolean isClientRegistrationEnabled() {
-        return parameterService.findAsBoolean(Key.APPLICATION_REGISTRATION_ENABLED);
+        return parameterService.findEnvAsBoolean(Key.APPLICATION_REGISTRATION_ENABLED);
     }
 
     private boolean isApplicationTypeAllowed(String applicationType) {
         Key key = Key.valueOf("APPLICATION_TYPE_" + applicationType.toUpperCase() + "_ENABLED");
-        return parameterService.findAsBoolean(key);
+        return parameterService.findEnvAsBoolean(key);
     }
 
     @Override

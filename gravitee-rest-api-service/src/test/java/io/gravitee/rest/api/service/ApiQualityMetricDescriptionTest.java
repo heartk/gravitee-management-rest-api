@@ -17,9 +17,7 @@ package io.gravitee.rest.api.service;
 
 import io.gravitee.rest.api.model.api.ApiEntity;
 import io.gravitee.rest.api.model.parameters.Key;
-import io.gravitee.rest.api.service.ParameterService;
 import io.gravitee.rest.api.service.quality.ApiQualityMetricDescription;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -48,7 +46,7 @@ public class ApiQualityMetricDescriptionTest {
 
     @Test
     public void shouldNotBeValidWithNull() {
-        when(parameterService.findAll(Key.API_QUALITY_METRICS_DESCRIPTION_MIN_LENGTH)).thenReturn(Collections.emptyList());
+        when(parameterService.findAllEnv(Key.API_QUALITY_METRICS_DESCRIPTION_MIN_LENGTH)).thenReturn(Collections.emptyList());
         ApiEntity api = mock(ApiEntity.class);
         when(api.getDescription()).thenReturn(null);
 
@@ -59,7 +57,7 @@ public class ApiQualityMetricDescriptionTest {
 
     @Test
     public void shouldNotBeValidWithNotEnoughDefaultLength() {
-        when(parameterService.findAll(Key.API_QUALITY_METRICS_DESCRIPTION_MIN_LENGTH)).thenReturn(Collections.emptyList());
+        when(parameterService.findAllEnv(Key.API_QUALITY_METRICS_DESCRIPTION_MIN_LENGTH)).thenReturn(Collections.emptyList());
         ApiEntity api = mock(ApiEntity.class);
         when(api.getDescription()).thenReturn("1234567890");
 
@@ -70,7 +68,7 @@ public class ApiQualityMetricDescriptionTest {
 
     @Test
     public void shouldBeValidWithEnoughDefaultLength() {
-        when(parameterService.findAll(Key.API_QUALITY_METRICS_DESCRIPTION_MIN_LENGTH)).thenReturn(Collections.emptyList());
+        when(parameterService.findAllEnv(Key.API_QUALITY_METRICS_DESCRIPTION_MIN_LENGTH)).thenReturn(Collections.emptyList());
         ApiEntity api = mock(ApiEntity.class);
         when(api.getDescription()).thenReturn("1234567890" +
                 "1234567890" +
@@ -90,7 +88,7 @@ public class ApiQualityMetricDescriptionTest {
 
     @Test
     public void shouldBeValidWithEnoughCustomLength() {
-        when(parameterService.findAll(Key.API_QUALITY_METRICS_DESCRIPTION_MIN_LENGTH)).thenReturn(Arrays.asList("3"));
+        when(parameterService.findAllEnv(Key.API_QUALITY_METRICS_DESCRIPTION_MIN_LENGTH)).thenReturn(Arrays.asList("3"));
         ApiEntity api = mock(ApiEntity.class);
         when(api.getDescription()).thenReturn("123");
 
@@ -101,7 +99,7 @@ public class ApiQualityMetricDescriptionTest {
 
     @Test
     public void shouldNotBeValidWithNotEnoughCustomLength() {
-        when(parameterService.findAll(Key.API_QUALITY_METRICS_DESCRIPTION_MIN_LENGTH)).thenReturn(Arrays.asList("3"));
+        when(parameterService.findAllEnv(Key.API_QUALITY_METRICS_DESCRIPTION_MIN_LENGTH)).thenReturn(Arrays.asList("3"));
         ApiEntity api = mock(ApiEntity.class);
         when(api.getDescription()).thenReturn("12");
 

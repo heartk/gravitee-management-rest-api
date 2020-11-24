@@ -20,6 +20,7 @@ import io.gravitee.rest.api.model.InlinePictureEntity;
 import io.gravitee.rest.api.model.PictureEntity;
 import io.gravitee.rest.api.model.UrlPictureEntity;
 import io.gravitee.rest.api.model.UserEntity;
+import io.gravitee.rest.api.model.parameters.ParameterReferenceType;
 import io.gravitee.rest.api.model.permissions.RolePermission;
 import io.gravitee.rest.api.portal.rest.mapper.UserMapper;
 import io.gravitee.rest.api.portal.rest.model.*;
@@ -29,6 +30,7 @@ import io.gravitee.rest.api.portal.rest.security.Permissions;
 import io.gravitee.rest.api.portal.rest.utils.PortalApiLinkHelper;
 import io.gravitee.rest.api.service.IdentityService;
 import io.gravitee.rest.api.service.UserService;
+import io.gravitee.rest.api.service.common.GraviteeContext;
 import io.gravitee.rest.api.service.exceptions.AbstractManagementException;
 import io.gravitee.rest.api.service.exceptions.PasswordAlreadyResetException;
 
@@ -71,7 +73,7 @@ public class UsersResource extends AbstractResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerUser(@Valid @NotNull(message = "Input must not be null.") RegisterUserInput registerUserInput) {
-        UserEntity newUser = userService.register(userMapper.convert(registerUserInput), registerUserInput.getConfirmationPageUrl());
+        UserEntity newUser = userService.register(userMapper.convert(registerUserInput), registerUserInput.getConfirmationPageUrl(), GraviteeContext.getCurrentEnvironment(), ParameterReferenceType.ENVIRONMENT);
         if (newUser != null) {
             return Response.ok().entity(userMapper.convert(newUser)).build();
         }
@@ -84,7 +86,7 @@ public class UsersResource extends AbstractResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response finalizeRegistration(@Valid @NotNull(message = "Input must not be null.") FinalizeRegistrationInput finalizeRegistrationInput) {
-        UserEntity newUser = userService.finalizeRegistration(userMapper.convert(finalizeRegistrationInput));
+        UserEntity newUser = userService.finalizeRegistration(userMapper.convert(finalizeRegistrationInput), GraviteeContext.getCurrentEnvironment(), ParameterReferenceType.ENVIRONMENT);
         if (newUser != null) {
             return Response.ok().entity(userMapper.convert(newUser)).build();
         }
@@ -161,6 +163,7 @@ public class UsersResource extends AbstractResource {
         // use serialVersionUID from JDK 1.2.2 for interoperability
         private static final long serialVersionUID = 8575799808933029326L;
 
+        @Override
         public int compare(String s1, String s2) {
             if (s1 == null) return 1;
             if (s2 == null) return -1;

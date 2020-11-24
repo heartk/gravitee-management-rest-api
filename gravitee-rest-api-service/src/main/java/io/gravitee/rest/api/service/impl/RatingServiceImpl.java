@@ -16,6 +16,14 @@
 package io.gravitee.rest.api.service.impl;
 
 import io.gravitee.common.data.domain.Page;
+import io.gravitee.repository.exceptions.TechnicalException;
+import io.gravitee.repository.management.api.RatingAnswerRepository;
+import io.gravitee.repository.management.api.RatingRepository;
+import io.gravitee.repository.management.api.search.Pageable;
+import io.gravitee.repository.management.api.search.builder.PageableBuilder;
+import io.gravitee.repository.management.model.Rating;
+import io.gravitee.repository.management.model.RatingAnswer;
+import io.gravitee.repository.management.model.RatingReferenceType;
 import io.gravitee.rest.api.model.*;
 import io.gravitee.rest.api.model.parameters.Key;
 import io.gravitee.rest.api.service.*;
@@ -26,21 +34,15 @@ import io.gravitee.rest.api.service.exceptions.RatingNotFoundException;
 import io.gravitee.rest.api.service.exceptions.TechnicalManagementException;
 import io.gravitee.rest.api.service.notification.ApiHook;
 import io.gravitee.rest.api.service.notification.NotificationParamsBuilder;
-import io.gravitee.repository.exceptions.TechnicalException;
-import io.gravitee.repository.management.api.RatingAnswerRepository;
-import io.gravitee.repository.management.api.RatingRepository;
-import io.gravitee.repository.management.api.search.Pageable;
-import io.gravitee.repository.management.api.search.builder.PageableBuilder;
-import io.gravitee.repository.management.model.Rating;
-import io.gravitee.repository.management.model.RatingAnswer;
-import io.gravitee.repository.management.model.RatingReferenceType;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.OptionalDouble;
 
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.reverseOrder;
@@ -275,7 +277,7 @@ public class RatingServiceImpl extends AbstractService implements RatingService 
 
     @Override
     public boolean isEnabled() {
-        return parameterService.findAsBoolean(Key.PORTAL_RATING_ENABLED);
+        return parameterService.findEnvAsBoolean(Key.PORTAL_RATING_ENABLED);
     }
 
     private Rating findModelById(String id) {

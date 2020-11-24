@@ -20,6 +20,7 @@ import io.gravitee.repository.management.api.search.UserCriteria;
 import io.gravitee.rest.api.model.*;
 import io.gravitee.rest.api.model.common.Pageable;
 import io.gravitee.rest.api.model.configuration.identity.SocialIdentityProviderEntity;
+import io.gravitee.rest.api.model.parameters.ParameterReferenceType;
 import io.gravitee.rest.api.service.common.JWTHelper.ACTION;
 
 import java.util.List;
@@ -54,11 +55,11 @@ public interface UserService {
 
     Page<UserEntity> search(UserCriteria criteria, Pageable pageable);
 
-    UserEntity register(NewExternalUserEntity newExternalUserEntity);
+    UserEntity register(NewExternalUserEntity newExternalUserEntity, String referenceId, ParameterReferenceType referenceType);
 
-    UserEntity register(NewExternalUserEntity newExternalUserEntity, String confirmationPageUrl);
+    UserEntity register(NewExternalUserEntity newExternalUserEntity, String confirmationPageUrl, String referenceId, ParameterReferenceType referenceType);
 
-    UserEntity finalizeRegistration(RegisterUserEntity registerUserEntity);
+    UserEntity finalizeRegistration(RegisterUserEntity registerUserEntity, String referenceId, ParameterReferenceType referenceType);
 
     UserEntity finalizeResetPassword(ResetPasswordUserEntity registerUserEntity);
 

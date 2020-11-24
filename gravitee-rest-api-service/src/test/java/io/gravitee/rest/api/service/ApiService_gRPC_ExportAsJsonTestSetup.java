@@ -97,7 +97,7 @@ public class ApiService_gRPC_ExportAsJsonTestSetup {
         PropertyFilter apiMembershipTypeFilter = new ApiPermissionFilter();
         objectMapper.setFilterProvider(new SimpleFilterProvider(Collections.singletonMap("apiMembershipTypeFilter", apiMembershipTypeFilter)));
 
-        when(parameterService.find(Key.PORTAL_ENTRYPOINT)).thenReturn(Key.PORTAL_ENTRYPOINT.defaultValue());
+        when(parameterService.findEnv(Key.PORTAL_ENTRYPOINT)).thenReturn(Key.PORTAL_ENTRYPOINT.defaultValue());
         // register API Entity serializers
         when(applicationContext.getBean(MembershipService.class)).thenReturn(membershipService);
         when(applicationContext.getBean(PlanService.class)).thenReturn(planService);

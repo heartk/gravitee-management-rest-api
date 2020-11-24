@@ -17,7 +17,11 @@ package io.gravitee.rest.api.portal.rest.resource;
 
 import io.gravitee.common.http.HttpStatusCode;
 import io.gravitee.rest.api.idp.api.identity.SearchableUser;
-import io.gravitee.rest.api.model.*;
+import io.gravitee.rest.api.model.NewExternalUserEntity;
+import io.gravitee.rest.api.model.RegisterUserEntity;
+import io.gravitee.rest.api.model.UrlPictureEntity;
+import io.gravitee.rest.api.model.UserEntity;
+import io.gravitee.rest.api.model.parameters.ParameterReferenceType;
 import io.gravitee.rest.api.portal.rest.model.*;
 import io.gravitee.rest.api.service.exceptions.UserNotFoundException;
 import org.junit.Before;
@@ -25,12 +29,9 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static io.gravitee.common.http.HttpStatusCode.OK_200;
 import static org.junit.Assert.*;
@@ -117,14 +118,14 @@ public class UsersResourceTest extends AbstractResourceTest {
         NewExternalUserEntity newExternalUserEntity = new NewExternalUserEntity();
         doReturn(newExternalUserEntity).when(userMapper).convert(input);
 
-        doReturn(new UserEntity()).when(userService).register(newExternalUserEntity, "HTTP://MY-CONFIRM-PAGE");
+        doReturn(new UserEntity()).when(userService).register(newExternalUserEntity, "HTTP://MY-CONFIRM-PAGE", "DEFAULT", ParameterReferenceType.ENVIRONMENT);
 
         // test
         final Response response = target("registration").request().post(Entity.json(input));
         assertEquals(HttpStatusCode.OK_200, response.getStatus());
 
         Mockito.verify(userMapper).convert(input);
-        Mockito.verify(userService).register(newExternalUserEntity, "HTTP://MY-CONFIRM-PAGE");
+        Mockito.verify(userService).register(newExternalUserEntity, "HTTP://MY-CONFIRM-PAGE", "DEFAULT", ParameterReferenceType.ENVIRONMENT);
 
     }
 
@@ -137,14 +138,14 @@ public class UsersResourceTest extends AbstractResourceTest {
         NewExternalUserEntity newExternalUserEntity = new NewExternalUserEntity();
         doReturn(newExternalUserEntity).when(userMapper).convert(input);
 
-        doReturn(null).when(userService).register(newExternalUserEntity, null);
+        doReturn(null).when(userService).register(newExternalUserEntity, null, "DEFAULT", ParameterReferenceType.ENVIRONMENT);
 
         // test
         final Response response = target("registration").request().post(Entity.json(input));
         assertEquals(HttpStatusCode.INTERNAL_SERVER_ERROR_500, response.getStatus());
 
         Mockito.verify(userMapper).convert(input);
-        Mockito.verify(userService).register(newExternalUserEntity, null);
+        Mockito.verify(userService).register(newExternalUserEntity, null, "DEFAULT", ParameterReferenceType.ENVIRONMENT);
     }
 
     @Test
@@ -178,14 +179,14 @@ public class UsersResourceTest extends AbstractResourceTest {
         RegisterUserEntity registerUserEntity = new RegisterUserEntity();
         doReturn(registerUserEntity).when(userMapper).convert(input);
 
-        doReturn(new UserEntity()).when(userService).finalizeRegistration(registerUserEntity);
+        doReturn(new UserEntity()).when(userService).finalizeRegistration(registerUserEntity, "DEFAULT", ParameterReferenceType.ENVIRONMENT);
 
         // test
         final Response response = target("registration/_finalize").request().post(Entity.json(input));
         assertEquals(HttpStatusCode.OK_200, response.getStatus());
 
         Mockito.verify(userMapper).convert(input);
-        Mockito.verify(userService).finalizeRegistration(registerUserEntity);
+        Mockito.verify(userService).finalizeRegistration(registerUserEntity, "DEFAULT", ParameterReferenceType.ENVIRONMENT);
     }
 
     @Test
@@ -197,14 +198,14 @@ public class UsersResourceTest extends AbstractResourceTest {
         RegisterUserEntity registerUserEntity = new RegisterUserEntity();
         doReturn(registerUserEntity).when(userMapper).convert(input);
 
-        doReturn(null).when(userService).finalizeRegistration(registerUserEntity);
+        doReturn(null).when(userService).finalizeRegistration(registerUserEntity, "DEFAULT", ParameterReferenceType.ENVIRONMENT);
 
         // test
         final Response response = target("registration/_finalize").request().post(Entity.json(input));
         assertEquals(HttpStatusCode.INTERNAL_SERVER_ERROR_500, response.getStatus());
 
         Mockito.verify(userMapper).convert(input);
-        Mockito.verify(userService).finalizeRegistration(registerUserEntity);
+        Mockito.verify(userService).finalizeRegistration(registerUserEntity, "DEFAULT", ParameterReferenceType.ENVIRONMENT);
     }
 
     @Test

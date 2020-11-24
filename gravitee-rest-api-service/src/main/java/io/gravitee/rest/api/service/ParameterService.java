@@ -17,6 +17,7 @@ package io.gravitee.rest.api.service;
 
 import io.gravitee.repository.management.model.Parameter;
 import io.gravitee.rest.api.model.parameters.Key;
+import io.gravitee.rest.api.model.parameters.ParameterReferenceType;
 
 import java.util.List;
 import java.util.Map;
@@ -26,22 +27,80 @@ import java.util.function.Predicate;
 /**
  * @author Azize ELAMRANI (azize at graviteesource.com)
  * @author Nicolas GERAUD (nicolas.geraud at graviteesource.com)
+ * @author Florent CHAMFROY (florent.chamfroy at graviteesource.com)
  * @author GraviteeSource Team
  */
 public interface ParameterService {
 
-    String find(Key key);
-    boolean findAsBoolean(Key key);
-    List<String> findAll(Key key);
-    Map<String, List<String>> findAll(List<Key> keys);
+    // Parameters for environment
 
-    <T> List<T> findAll(Key key, Function<String, T> mapper);
-    <T> Map<String, List<T>> findAll(List<Key> keys, Function<String, T> mapper);
+    String findEnv(Key key);
 
-    <T> List<T> findAll(Key key, Function<String, T> mapper, Predicate<String> filter);
-    <T> Map<String, List<T>> findAll(List<Key> keys, Function<String, T> mapper, Predicate<String> filter);
+    boolean findEnvAsBoolean(Key key);
 
-    Parameter save(Key key, String value);
-    Parameter save(Key key, List<String> value);
-    Parameter save(Key key, Map<String, String> values);
+    List<String> findAllEnv(Key key);
+
+    Map<String, List<String>> findAllEnv(List<Key> keys);
+
+    <T> List<T> findAllEnv(Key key, Function<String, T> mapper);
+
+    <T> Map<String, List<T>> findAllEnv(List<Key> keys, Function<String, T> mapper);
+
+    <T> List<T> findAllEnv(Key key, Function<String, T> mapper, Predicate<String> filter);
+
+    <T> Map<String, List<T>> findAllEnv(List<Key> keys, Function<String, T> mapper, Predicate<String> filter);
+
+    Parameter saveEnv(Key key, String value);
+
+    Parameter saveEnv(Key key, List<String> value);
+
+    Parameter saveEnv(Key key, Map<String, String> values);
+
+    // Parameters for organization
+
+    String findOrg(Key key);
+
+    boolean findOrgAsBoolean(Key key);
+
+    List<String> findAllOrg(Key key);
+
+    Map<String, List<String>> findAllOrg(List<Key> keys);
+
+    <T> List<T> findAllOrg(Key key, Function<String, T> mapper);
+
+    <T> Map<String, List<T>> findAllOrg(List<Key> keys, Function<String, T> mapper);
+
+    <T> List<T> findAllOrg(Key key, Function<String, T> mapper, Predicate<String> filter);
+
+    <T> Map<String, List<T>> findAllOrg(List<Key> keys, Function<String, T> mapper, Predicate<String> filter);
+
+    Parameter saveOrg(Key key, String value);
+
+    Parameter saveOrg(Key key, List<String> value);
+
+    Parameter saveOrg(Key key, Map<String, String> values);
+
+    // Parameters by reference
+
+    String find(Key key, String referenceId, ParameterReferenceType referenceType);
+
+    boolean findAsBoolean(Key key, String referenceId, ParameterReferenceType referenceType);
+
+    List<String> findAll(Key key, String referenceId, ParameterReferenceType referenceType);
+
+    Map<String, List<String>> findAll(List<Key> keys, String referenceId, ParameterReferenceType referenceType);
+
+    <T> List<T> findAll(Key key, Function<String, T> mapper, String referenceId, ParameterReferenceType referenceType);
+
+    <T> Map<String, List<T>> findAll(List<Key> keys, Function<String, T> mapper, String referenceId, ParameterReferenceType referenceType);
+
+    <T> List<T> findAll(Key key, Function<String, T> mapper, Predicate<String> filter, String referenceId, ParameterReferenceType referenceType);
+
+    <T> Map<String, List<T>> findAll(List<Key> keys, Function<String, T> mapper, Predicate<String> filter, String referenceId, ParameterReferenceType referenceType);
+
+    Parameter save(Key key, String value, String referenceId, ParameterReferenceType referenceType);
+
+    Parameter save(Key key, List<String> value, String referenceId, ParameterReferenceType referenceType);
+
+    Parameter save(Key key, Map<String, String> values, String referenceId, ParameterReferenceType referenceType);
 }

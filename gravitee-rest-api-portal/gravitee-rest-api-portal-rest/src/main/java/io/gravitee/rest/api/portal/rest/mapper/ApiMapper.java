@@ -107,7 +107,7 @@ public class ApiMapper {
 
         apiItem.setVersion(api.getVersion());
 
-        boolean isCategoryModeEnabled = this.parameterService.findAsBoolean(Key.PORTAL_APIS_CATEGORY_ENABLED);
+        boolean isCategoryModeEnabled = this.parameterService.findEnvAsBoolean(Key.PORTAL_APIS_CATEGORY_ENABLED);
         if (isCategoryModeEnabled && api.getCategories() != null) {
             apiItem.setCategories(api.getCategories().stream().filter(categoryId -> {
                 try {

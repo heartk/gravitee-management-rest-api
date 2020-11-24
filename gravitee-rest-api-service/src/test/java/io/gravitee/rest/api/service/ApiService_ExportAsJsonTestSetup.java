@@ -25,7 +25,6 @@ import com.google.common.io.Resources;
 import io.gravitee.common.http.HttpMethod;
 import io.gravitee.definition.jackson.datatype.GraviteeMapper;
 import io.gravitee.definition.model.*;
-import io.gravitee.definition.model.endpoint.GrpcEndpoint;
 import io.gravitee.definition.model.endpoint.HttpEndpoint;
 import io.gravitee.repository.exceptions.TechnicalException;
 import io.gravitee.repository.management.api.ApiRepository;
@@ -39,13 +38,10 @@ import io.gravitee.rest.api.service.impl.ApiServiceImpl;
 import io.gravitee.rest.api.service.jackson.filter.ApiPermissionFilter;
 import io.gravitee.rest.api.service.jackson.ser.api.*;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.internal.util.collections.Sets;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
@@ -62,7 +58,6 @@ import static org.mockito.Mockito.when;
  * @author Nicolas Geraud (nicolas.geraud at graviteesource.com)
  * @author GraviteeSource Team
  */
-@RunWith(MockitoJUnitRunner.class)
 public class ApiService_ExportAsJsonTestSetup {
 
     protected static final String API_ID = "id-api";
@@ -100,7 +95,7 @@ public class ApiService_ExportAsJsonTestSetup {
         PropertyFilter apiMembershipTypeFilter = new ApiPermissionFilter();
         objectMapper.setFilterProvider(new SimpleFilterProvider(Collections.singletonMap("apiMembershipTypeFilter", apiMembershipTypeFilter)));
 
-        when(parameterService.find(Key.PORTAL_ENTRYPOINT)).thenReturn(Key.PORTAL_ENTRYPOINT.defaultValue());
+        when(parameterService.findEnv(Key.PORTAL_ENTRYPOINT)).thenReturn(Key.PORTAL_ENTRYPOINT.defaultValue());
         // register API Entity serializers
         when(applicationContext.getBean(MembershipService.class)).thenReturn(membershipService);
         when(applicationContext.getBean(PlanService.class)).thenReturn(planService);

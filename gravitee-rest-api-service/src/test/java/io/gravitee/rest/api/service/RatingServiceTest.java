@@ -27,17 +27,10 @@ import io.gravitee.repository.management.model.RatingReferenceType;
 import io.gravitee.rest.api.idp.api.authentication.UserDetails;
 import io.gravitee.rest.api.model.*;
 import io.gravitee.rest.api.model.parameters.Key;
-import io.gravitee.rest.api.service.ApiService;
-import io.gravitee.rest.api.service.AuditService;
-import io.gravitee.rest.api.service.NotifierService;
-import io.gravitee.rest.api.service.ParameterService;
-import io.gravitee.rest.api.service.RatingService;
-import io.gravitee.rest.api.service.UserService;
 import io.gravitee.rest.api.service.exceptions.RatingAlreadyExistsException;
 import io.gravitee.rest.api.service.exceptions.RatingNotFoundException;
 import io.gravitee.rest.api.service.impl.RatingServiceImpl;
 import io.gravitee.rest.api.service.notification.ApiHook;
-
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -125,7 +118,7 @@ public class RatingServiceTest {
         when(userService.findById(USER)).thenReturn(user);
         when(user.getId()).thenReturn(USER);
 
-        when(mockParameterService.findAsBoolean(Key.PORTAL_RATING_ENABLED)).thenReturn(Boolean.TRUE);
+        when(mockParameterService.findEnvAsBoolean(Key.PORTAL_RATING_ENABLED)).thenReturn(Boolean.TRUE);
     }
 
     @AfterClass

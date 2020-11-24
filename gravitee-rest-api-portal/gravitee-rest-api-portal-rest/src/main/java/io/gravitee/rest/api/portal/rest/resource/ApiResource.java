@@ -103,10 +103,10 @@ public class ApiResource extends AbstractResource {
             }
 
             api.links(apiMapper.computeApiLinks(PortalApiLinkHelper.apisURL(uriInfo.getBaseUriBuilder(), api.getId()), apiEntity.getUpdatedAt()));
-            if (!parameterService.findAsBoolean(Key.PORTAL_APIS_SHOW_TAGS_IN_APIHEADER)) {
+            if (!parameterService.findEnvAsBoolean(Key.PORTAL_APIS_SHOW_TAGS_IN_APIHEADER)) {
                 api.setLabels(new ArrayList<>());
             }
-            if (!parameterService.findAsBoolean(Key.PORTAL_APIS_SHOW_CATEGORIES_IN_APIHEADER)) {
+            if (!parameterService.findEnvAsBoolean(Key.PORTAL_APIS_SHOW_CATEGORIES_IN_APIHEADER)) {
                 api.setCategories(new ArrayList<>());
             }
             return Response.ok(api).build();

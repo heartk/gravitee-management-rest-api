@@ -63,4 +63,29 @@ public class GraviteeContext {
     public static String getDefaultOrganization() {
         return DEFAULT_ORGANIZATION;
     }
+
+    public static ReferenceContext getCurrentContext() {
+        if (getCurrentEnvironment() == null) {
+            return new ReferenceContext(getCurrentOrganization(), "ORGANIZATION");
+        }
+        return new ReferenceContext(getCurrentEnvironment(), "ENVIRONMENT");
+    }
+
+    public static class ReferenceContext {
+        String referenceId;
+        String referenceType;
+
+        public ReferenceContext(String referenceId, String referenceType) {
+            this.referenceId = referenceId;
+            this.referenceType = referenceType;
+        }
+
+        public String getReferenceId() {
+            return referenceId;
+        }
+
+        public String getReferenceType() {
+            return referenceType;
+        }
+    }
 }

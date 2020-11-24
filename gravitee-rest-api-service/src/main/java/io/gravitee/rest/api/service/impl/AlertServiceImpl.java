@@ -147,7 +147,7 @@ public class AlertServiceImpl extends TransactionalService implements AlertServi
     public AlertStatusEntity getStatus() {
         AlertStatusEntity status = new AlertStatusEntity();
 
-        status.setEnabled(parameterService.findAsBoolean(Key.ALERT_ENABLED));
+        status.setEnabled(parameterService.findOrgAsBoolean(Key.ALERT_ENABLED));
         status.setPlugins(triggerProviderManager.findAll().size());
 
         return status;
@@ -456,14 +456,14 @@ public class AlertServiceImpl extends TransactionalService implements AlertServi
         EmailNotifierConfiguration configuration = new EmailNotifierConfiguration();
 
         if (host == null) {
-            configuration.setHost(parameterService.find(Key.EMAIL_HOST));
-            final String emailPort = parameterService.find(Key.EMAIL_PORT);
+            configuration.setHost(parameterService.findOrg(Key.EMAIL_HOST));
+            final String emailPort = parameterService.findOrg(Key.EMAIL_PORT);
             if (emailPort != null) {
                 configuration.setPort(Integer.parseInt(emailPort));
             }
-            configuration.setUsername(parameterService.find(Key.EMAIL_USERNAME));
-            configuration.setPassword(parameterService.find(Key.EMAIL_PASSWORD));
-            configuration.setStartTLSEnabled(parameterService.findAsBoolean(Key.EMAIL_HOST));
+            configuration.setUsername(parameterService.findOrg(Key.EMAIL_USERNAME));
+            configuration.setPassword(parameterService.findOrg(Key.EMAIL_PASSWORD));
+            configuration.setStartTLSEnabled(parameterService.findOrgAsBoolean(Key.EMAIL_HOST));
         } else {
             configuration.setHost(host);
             configuration.setPort(Integer.parseInt(port));
@@ -490,7 +490,7 @@ public class AlertServiceImpl extends TransactionalService implements AlertServi
     }
 
     private void checkAlert() {
-        if (!parameterService.findAsBoolean(Key.ALERT_ENABLED) || triggerProviderManager.findAll().isEmpty()) {
+        if (!parameterService.findOrgAsBoolean(Key.ALERT_ENABLED) || triggerProviderManager.findAll().isEmpty()) {
             throw new AlertUnavailableException();
         }
     }

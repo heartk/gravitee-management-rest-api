@@ -25,7 +25,7 @@ import org.mockito.ArgumentCaptor;
 
 import javax.ws.rs.core.Response;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -91,7 +91,7 @@ public class ApiSubscriptionsResourceTest extends AbstractResourceTest {
         when(subscriptionService.create(any(NewSubscriptionEntity.class), any())).thenReturn(fakeSubscriptionEntity);
         when(subscriptionService.process(any(ProcessSubscriptionEntity.class), any()))
                 .thenReturn(fakeSubscriptionEntity);
-        when(parameterService.findAsBoolean(Key.PLAN_SECURITY_APIKEY_CUSTOM_ALLOWED)).thenReturn(true);
+        when(parameterService.findEnvAsBoolean(Key.PLAN_SECURITY_APIKEY_CUSTOM_ALLOWED)).thenReturn(true);
 
         ArgumentCaptor<String> customApiKeyCaptor = ArgumentCaptor.forClass(String.class);
 
@@ -119,7 +119,7 @@ public class ApiSubscriptionsResourceTest extends AbstractResourceTest {
         when(subscriptionService.create(any(NewSubscriptionEntity.class))).thenReturn(fakeSubscriptionEntity);
         when(subscriptionService.process(any(ProcessSubscriptionEntity.class), any()))
                 .thenReturn(fakeSubscriptionEntity);
-        when(parameterService.findAsBoolean(Key.PLAN_SECURITY_APIKEY_CUSTOM_ALLOWED)).thenReturn(false);
+        when(parameterService.findEnvAsBoolean(Key.PLAN_SECURITY_APIKEY_CUSTOM_ALLOWED)).thenReturn(false);
 
         Response response = envTarget()
                 .queryParam("application", APP_NAME)

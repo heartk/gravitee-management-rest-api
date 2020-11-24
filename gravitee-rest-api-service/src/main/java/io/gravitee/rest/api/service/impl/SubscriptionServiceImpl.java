@@ -295,7 +295,7 @@ public class SubscriptionServiceImpl extends AbstractService implements Subscrip
             final PrimaryOwnerEntity apiOwner = api.getPrimaryOwner();
             //final PrimaryOwnerEntity appOwner = applicationEntity.getPrimaryOwner();
 
-            String managementURL = parameterService.find(Key.MANAGEMENT_URL);
+            String managementURL = parameterService.findOrg(Key.MANAGEMENT_URL);
 
             String subscriptionsUrl = "";
 

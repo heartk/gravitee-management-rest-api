@@ -19,6 +19,7 @@ import io.gravitee.common.event.EventManager;
 import io.gravitee.common.event.impl.SimpleEvent;
 import io.gravitee.repository.management.model.Parameter;
 import io.gravitee.rest.api.model.parameters.Key;
+import io.gravitee.rest.api.model.parameters.ParameterReferenceType;
 import io.gravitee.rest.api.service.ParameterService;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,11 +30,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Arrays;
 
 import static java.util.Collections.singletonList;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GraviteeCorsConfigurationTest {
@@ -44,27 +43,29 @@ public class GraviteeCorsConfigurationTest {
 
     private GraviteeCorsConfiguration graviteeCorsConfiguration;
 
+    private final static String ENVIRONMENT_ID = "DEFAULT";
+
     @Before
     public void setUp() {
         reset(parameterService, eventManager);
 
-        when(parameterService.find(Key.HTTP_CORS_MAX_AGE)).thenReturn("10");
+        when(parameterService.find(Key.PORTAL_HTTP_CORS_MAX_AGE, ENVIRONMENT_ID, ParameterReferenceType.ENVIRONMENT)).thenReturn("10");
     }
 
     @Test
     public void shouldConstructAndInitializeFields() {
 
-        when(parameterService.find(Key.HTTP_CORS_ALLOW_METHODS)).thenReturn(null);
+        when(parameterService.find(Key.PORTAL_HTTP_CORS_ALLOW_METHODS, ENVIRONMENT_ID, ParameterReferenceType.ENVIRONMENT)).thenReturn(null);
 
-        graviteeCorsConfiguration = new GraviteeCorsConfiguration(parameterService, eventManager);
+        graviteeCorsConfiguration = new GraviteeCorsConfiguration(parameterService, eventManager, ENVIRONMENT_ID);
 
         verify(eventManager, times(1)).subscribeForEvents(graviteeCorsConfiguration, Key.class);
 
-        verify(parameterService, times(1)).find(Key.HTTP_CORS_ALLOW_ORIGIN);
-        verify(parameterService, times(1)).find(Key.HTTP_CORS_ALLOW_HEADERS);
-        verify(parameterService, times(1)).find(Key.HTTP_CORS_ALLOW_METHODS);
-        verify(parameterService, times(1)).find(Key.HTTP_CORS_EXPOSED_HEADERS);
-        verify(parameterService, times(1)).find(Key.HTTP_CORS_MAX_AGE);
+        verify(parameterService, times(1)).find(Key.PORTAL_HTTP_CORS_ALLOW_ORIGIN, ENVIRONMENT_ID, ParameterReferenceType.ENVIRONMENT);
+        verify(parameterService, times(1)).find(Key.PORTAL_HTTP_CORS_ALLOW_HEADERS, ENVIRONMENT_ID, ParameterReferenceType.ENVIRONMENT);
+        verify(parameterService, times(1)).find(Key.PORTAL_HTTP_CORS_ALLOW_METHODS, ENVIRONMENT_ID, ParameterReferenceType.ENVIRONMENT);
+        verify(parameterService, times(1)).find(Key.PORTAL_HTTP_CORS_EXPOSED_HEADERS, ENVIRONMENT_ID, ParameterReferenceType.ENVIRONMENT);
+        verify(parameterService, times(1)).find(Key.PORTAL_HTTP_CORS_MAX_AGE, ENVIRONMENT_ID, ParameterReferenceType.ENVIRONMENT);
 
         assertNotNull(graviteeCorsConfiguration.getAllowedMethods());
         assertEquals(1, graviteeCorsConfiguration.getAllowedMethods().size());
@@ -72,13 +73,13 @@ public class GraviteeCorsConfigurationTest {
 
     @Test
     public void shouldSetFieldsOnEvent() {
-        graviteeCorsConfiguration = new GraviteeCorsConfiguration(parameterService, eventManager);
+        graviteeCorsConfiguration = new GraviteeCorsConfiguration(parameterService, eventManager, ENVIRONMENT_ID);
 
-        graviteeCorsConfiguration.onEvent(new SimpleEvent<>(Key.HTTP_CORS_ALLOW_ORIGIN, buildParameter("origin1;origin2")));
-        graviteeCorsConfiguration.onEvent(new SimpleEvent<>(Key.HTTP_CORS_ALLOW_HEADERS, buildParameter("header1;header2")));
-        graviteeCorsConfiguration.onEvent(new SimpleEvent<>(Key.HTTP_CORS_ALLOW_METHODS, buildParameter("method1;method2")));
-        graviteeCorsConfiguration.onEvent(new SimpleEvent<>(Key.HTTP_CORS_EXPOSED_HEADERS, buildParameter("exposed1")));
-        graviteeCorsConfiguration.onEvent(new SimpleEvent<>(Key.HTTP_CORS_MAX_AGE, buildParameter("12")));
+        graviteeCorsConfiguration.onEvent(new SimpleEvent<>(Key.PORTAL_HTTP_CORS_ALLOW_ORIGIN, buildParameter("origin1;origin2")));
+        graviteeCorsConfiguration.onEvent(new SimpleEvent<>(Key.PORTAL_HTTP_CORS_ALLOW_HEADERS, buildParameter("header1;header2")));
+        graviteeCorsConfiguration.onEvent(new SimpleEvent<>(Key.PORTAL_HTTP_CORS_ALLOW_METHODS, buildParameter("method1;method2")));
+        graviteeCorsConfiguration.onEvent(new SimpleEvent<>(Key.PORTAL_HTTP_CORS_EXPOSED_HEADERS, buildParameter("exposed1")));
+        graviteeCorsConfiguration.onEvent(new SimpleEvent<>(Key.PORTAL_HTTP_CORS_MAX_AGE, buildParameter("12")));
 
         assertEquals(Arrays.asList("origin1", "origin2"), graviteeCorsConfiguration.getAllowedOrigins());
         assertEquals(Arrays.asList("header1", "header2"), graviteeCorsConfiguration.getAllowedHeaders());
@@ -87,9 +88,23 @@ public class GraviteeCorsConfigurationTest {
         assertEquals(Long.valueOf(12L), graviteeCorsConfiguration.getMaxAge());
     }
 
+    @Test
+    public void shouldNotSetFieldsOnEventWithWrongEnvId() {
+        graviteeCorsConfiguration = new GraviteeCorsConfiguration(parameterService, eventManager, ENVIRONMENT_ID);
+
+        graviteeCorsConfiguration.onEvent(new SimpleEvent<>(Key.CONSOLE_HTTP_CORS_MAX_AGE, buildParameter("12", "ANOTHER_ORG")));
+
+        assertEquals(Long.valueOf(10L), graviteeCorsConfiguration.getMaxAge());
+    }
+
     private Parameter buildParameter(String value) {
+        return buildParameter(value, ENVIRONMENT_ID);
+    }
+
+    private Parameter buildParameter(String value, String referenceId) {
         Parameter parameter = new Parameter();
         parameter.setValue(value);
+        parameter.setReferenceId(referenceId);
         return parameter;
     }
 }

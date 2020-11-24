@@ -146,7 +146,7 @@ public class ApiSubscriptionsResource extends AbstractResource {
             @CustomApiKey @QueryParam("customApiKey") String customApiKey) {
 
         if (StringUtils.isNotEmpty(customApiKey)  &&
-                !parameterService.findAsBoolean(Key.PLAN_SECURITY_APIKEY_CUSTOM_ALLOWED)) {
+                !parameterService.findEnvAsBoolean(Key.PLAN_SECURITY_APIKEY_CUSTOM_ALLOWED)) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("You are not allowed to provide a custom API Key")
                     .build();

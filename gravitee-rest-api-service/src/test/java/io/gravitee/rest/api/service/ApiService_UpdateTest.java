@@ -528,7 +528,7 @@ public class ApiService_UpdateTest {
         verify(emailService).sendAsyncEmailNotification(argThat(emailNotification -> emailNotification.getTemplate().equals(EmailNotificationBuilder.EmailTemplate.API_ASK_FOR_REVIEW.getLinkedHook().getTemplate())
                     && emailNotification.getTo().length == 1
                     && emailNotification.getTo()[0].equals("Reviewer@ema.il")
-        ));
+        ), any());
         verify(roleService).findByScope(RoleScope.API);
     }
 
@@ -562,7 +562,7 @@ public class ApiService_UpdateTest {
     @Test
     public void shouldNotChangeLifecycleStateFromCreatedInReview() throws TechnicalException {
         prepareUpdate();
-        when(parameterService.findAsBoolean(Key.API_REVIEW_ENABLED)).thenReturn(true);
+        when(parameterService.findEnvAsBoolean(Key.API_REVIEW_ENABLED)).thenReturn(true);
         final Workflow workflow = new Workflow();
         workflow.setState("IN_REVIEW");
         when(workflowService.findByReferenceAndType(API, API_ID, REVIEW)).thenReturn(singletonList(workflow));

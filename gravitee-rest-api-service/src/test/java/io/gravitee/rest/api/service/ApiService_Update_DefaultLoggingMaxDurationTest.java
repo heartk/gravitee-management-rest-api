@@ -196,7 +196,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.NONE);
         logging.setCondition("wrong");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -223,7 +223,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("true");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(0L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(0L));
 
         apiService.update(API_ID, existingApi);
 
@@ -250,7 +250,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("true");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -278,7 +278,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("#request.timestamp <= 2550166583090l");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -306,7 +306,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("#request.timestamp < 2550166583090l");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -334,7 +334,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("#request.timestamp <= 2550166583090l && #context.plan == '5aada00c-cd25-41f0-ada0-0ccd25b1f0f2");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -362,7 +362,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("#context.application == '5aada00c-cd25-41f0-ada0-0ccd25b1f0f2' && #request.timestamp <= 2550166583090l");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -390,7 +390,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("#context.application == '5aada00c-cd25-41f0-ada0-0ccd25b1f0f2' && #request.timestamp <= 2550166583090l && (#context.plan == '5aada00c-cd25-41f0-ada0-0ccd25b1f0f2')");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -418,7 +418,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("(#context.application == '5aada00c-cd25-41f0-ada0-0ccd25b1f0f2') && #request.timestamp <= 2550166583090l && (#context.plan == '5aada00c-cd25-41f0-ada0-0ccd25b1f0f2')");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -446,7 +446,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("((#context.application == '5aada00c-cd25-41f0-ada0-0ccd25b1f0f2')) && #request.timestamp <= 2550166583090l && (#context.plan == '5aada00c-cd25-41f0-ada0-0ccd25b1f0f2')");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -474,7 +474,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("#context.application == '5aada00c-cd25-41f0-ada0-0ccd25b1f0f2' && #request.timestamp <= 2550166583090l && #context.plan == '5aada00c-cd25-41f0-ada0-0ccd25b1f0f2'");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -502,7 +502,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("#request.timestamp <= 2l");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(3L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(3L));
 
         apiService.update(API_ID, existingApi);
 
@@ -530,7 +530,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("#request.timestamp >= 5l");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -558,7 +558,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("#request.timestamp > 5l");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -586,7 +586,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         logging.setMode(LoggingMode.CLIENT_PROXY);
         logging.setCondition("#request.timestamp >= 0l");
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         apiService.update(API_ID, existingApi);
 
@@ -613,7 +613,7 @@ public class ApiService_Update_DefaultLoggingMaxDurationTest {
         final Logging logging = new Logging();
         logging.setMode(LoggingMode.CLIENT_PROXY);
         existingApi.getProxy().setLogging(logging);
-        when(parameterService.findAll(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
+        when(parameterService.findAllEnv(eq(Key.LOGGING_DEFAULT_MAX_DURATION), any())).thenReturn(singletonList(1L));
 
         checkCondition(logging, "true || #request.timestamp <= 2l", "(true) && #request.timestamp <= 1l");
         checkCondition(logging, "#request.timestamp <= 2l || true", "#request.timestamp <= 1l && (true)");

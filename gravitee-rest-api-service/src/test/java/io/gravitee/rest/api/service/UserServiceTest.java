@@ -32,6 +32,7 @@ import io.gravitee.rest.api.model.configuration.identity.GroupMappingEntity;
 import io.gravitee.rest.api.model.configuration.identity.RoleMappingEntity;
 import io.gravitee.rest.api.model.configuration.identity.SocialIdentityProviderEntity;
 import io.gravitee.rest.api.model.parameters.Key;
+import io.gravitee.rest.api.model.parameters.ParameterReferenceType;
 import io.gravitee.rest.api.model.permissions.RoleScope;
 import io.gravitee.rest.api.service.common.JWTHelper;
 import io.gravitee.rest.api.service.exceptions.*;
@@ -82,6 +83,8 @@ public class UserServiceTest {
     ;
     private static final String ORGANIZATION = "DEFAULT";
     private static final Set<UserRoleEntity> ROLES = Collections.singleton(new UserRoleEntity());
+
+    private static final ParameterReferenceType REFERENCE_TYPE = ParameterReferenceType.ORGANIZATION;
 
     static {
         UserRoleEntity r = ROLES.iterator().next();
@@ -346,25 +349,24 @@ public class UserServiceTest {
 
     @Test(expected = UserRegistrationUnavailableException.class)
     public void shouldNotCreateUserIfRegistrationIsDisabled() {
-        when(mockParameterService.findAsBoolean(Key.PORTAL_USERCREATION_ENABLED)).thenReturn(Boolean.FALSE);
         when(environment.getProperty("jwt.secret")).thenReturn(JWT_SECRET);
 
         RegisterUserEntity userEntity = new RegisterUserEntity();
         userEntity.setToken(createJWT(System.currentTimeMillis() / 1000 + 100));
 
-        userService.finalizeRegistration(userEntity);
+        userService.finalizeRegistration(userEntity, "DEFAULT", ParameterReferenceType.ENVIRONMENT);
     }
 
     @Test(expected = UserNotFoundException.class)
     public void createNewRegistrationUserThatIsNotCreatedYet() throws TechnicalException {
-        when(mockParameterService.findAsBoolean(Key.PORTAL_USERCREATION_ENABLED)).thenReturn(Boolean.TRUE);
+        when(mockParameterService.findAsBoolean(Key.PORTAL_USERCREATION_ENABLED, "DEFAULT", ParameterReferenceType.ENVIRONMENT)).thenReturn(Boolean.TRUE);
         when(environment.getProperty("jwt.secret")).thenReturn(JWT_SECRET);
 
         RegisterUserEntity userEntity = new RegisterUserEntity();
         userEntity.setToken(createJWT(System.currentTimeMillis() / 1000 + 100));
         userEntity.setPassword(PASSWORD);
 
-        userService.finalizeRegistration(userEntity);
+        userService.finalizeRegistration(userEntity, "DEFAULT", ParameterReferenceType.ENVIRONMENT);
 
     }
 
@@ -376,7 +378,7 @@ public class UserServiceTest {
         userEntity.setToken(createJWT(System.currentTimeMillis()/1000 + 100, RESET_PASSWORD.name()));
         userEntity.setPassword(PASSWORD);
 
-        userService.finalizeRegistration(userEntity);
+        userService.finalizeRegistration(userEntity, "DEFAULT", ParameterReferenceType.ENVIRONMENT);
 
     }
 
@@ -434,7 +436,7 @@ public class UserServiceTest {
     @Test(expected = PasswordFormatInvalidException.class)
     public void createAlreadyPreRegisteredUser_invalidPassword() throws TechnicalException {
         when(environment.getProperty("jwt.secret")).thenReturn(JWT_SECRET);
-        when(mockParameterService.findAsBoolean(Key.PORTAL_USERCREATION_ENABLED)).thenReturn(Boolean.TRUE);
+        when(mockParameterService.findAsBoolean(Key.PORTAL_USERCREATION_ENABLED, "DEFAULT", ParameterReferenceType.ENVIRONMENT)).thenReturn(Boolean.TRUE);
 
         User user = new User();
         user.setId("CUSTOM_LONG_ID");
@@ -447,14 +449,13 @@ public class UserServiceTest {
         userEntity.setToken(createJWT(System.currentTimeMillis() / 1000 + 100));
         userEntity.setPassword(PASSWORD);
 
-        userService.finalizeRegistration(userEntity);
+        userService.finalizeRegistration(userEntity, "DEFAULT", ParameterReferenceType.ENVIRONMENT);
     }
 
     @Test
     public void createAlreadyPreRegisteredUser() throws TechnicalException {
-        when(mockParameterService.findAsBoolean(Key.PORTAL_USERCREATION_ENABLED)).thenReturn(Boolean.TRUE);
+        when(mockParameterService.findAsBoolean(Key.PORTAL_USERCREATION_ENABLED, "DEFAULT", ParameterReferenceType.ENVIRONMENT)).thenReturn(Boolean.TRUE);
         when(environment.getProperty("jwt.secret")).thenReturn(JWT_SECRET);
-        when(mockParameterService.findAsBoolean(Key.PORTAL_USERCREATION_ENABLED)).thenReturn(Boolean.TRUE);
         when(passwordValidator.validate(anyString())).thenReturn(true);
 
         User user = new User();
@@ -469,7 +470,7 @@ public class UserServiceTest {
         userEntity.setToken(createJWT(System.currentTimeMillis() / 1000 + 100));
         userEntity.setPassword(PASSWORD);
 
-        userService.finalizeRegistration(userEntity);
+        userService.finalizeRegistration(userEntity, "DEFAULT", ParameterReferenceType.ENVIRONMENT);
 
         verify(userRepository).update(argThat(userToCreate -> "CUSTOM_LONG_ID".equals(userToCreate.getId()) &&
                 EMAIL.equals(userToCreate.getEmail()) &&
@@ -487,7 +488,7 @@ public class UserServiceTest {
 
         verify(userRepository, never()).findBySource(USER_SOURCE, USER_NAME, ORGANIZATION);
 
-        userService.finalizeRegistration(userEntity);
+        userService.finalizeRegistration(userEntity, "DEFAULT", ParameterReferenceType.ENVIRONMENT);
     }
 
     @Test
@@ -505,7 +506,7 @@ public class UserServiceTest {
 
         verify(user, never()).setPassword(null);
         verify(userRepository, never()).update(user);
-        verify(emailService).sendAsyncEmailNotification(any());
+        verify(emailService).sendAsyncEmailNotification(any(), any());
     }
 
     @Test
@@ -527,7 +528,7 @@ public class UserServiceTest {
 
         verify(user, never()).setPassword(null);
         verify(userRepository, never()).update(user);
-        verify(emailService).sendAsyncEmailNotification(any());
+        verify(emailService).sendAsyncEmailNotification(any(), any());
     }
 
     @Test(expected = PasswordAlreadyResetException.class)
@@ -546,7 +547,7 @@ public class UserServiceTest {
 
         verify(user, never()).setPassword(null);
         verify(userRepository, never()).update(user);
-        verify(emailService, never()).sendAsyncEmailNotification(any());
+        verify(emailService, never()).sendAsyncEmailNotification(any(), any());
     }
 
     @Test(expected = UserNotFoundException.class)
